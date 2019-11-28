@@ -42,8 +42,7 @@ android {
     }
 
     libraryVariants.all { variant ->
-        variant.outputs.all { output ->
-            def file = output.outputFile
+        variant.outputs.all {
             outputFileName = "${project.name}-${project.PAYMAYA_SDK_ANDROID_VERSION_NAME}-${variant.baseName}.aar"
         }
     }
