@@ -36,31 +36,15 @@ import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class PayMayaPayment {
-
-    private Card mCard;
-    private String mClientKey;
-    private String mUuidIdempotentKey;
-
-    /**
-     * @param clientKey Public API key
-     * @param card      User's Credit Card details
-     */
-    public PayMayaPayment(String clientKey, Card card) {
-        mClientKey = clientKey;
-        mCard = card;
-        mUuidIdempotentKey = UUID.randomUUID().toString();
-    }
-
     /**
      * Request and returns a payment token
      *
      * @return PaymentToken
      * @throws PayMayaPaymentException
      */
-    public PaymentToken getPaymentToken() throws PayMayaPaymentException {
+    public PaymentToken getPaymentToken(String clienKey, Card card) throws PayMayaPaymentException {
         try {
             String productionEndpoint = BuildConfig.API_PAYMENTS_ENDPOINT_PRODUCTION + "/payment-tokens";
             String sandboxEndpoint = BuildConfig.API_PAYMENTS_ENDPOINT_SANDBOX + "/payment-tokens";
@@ -70,17 +54,16 @@ public class PayMayaPayment {
 
             Request request = new Request(Request.Method.POST, envEndpoint);
 
-            byte[] body = JSONUtils.toJSON(mCard).toString().getBytes();
+            byte[] body = JSONUtils.toJSON(card).toString().getBytes();
             request.setBody(body);
 
-            String key = mClientKey + ":";
+            String key = clienKey + ":";
             String authorization = Base64.encodeToString(key.getBytes(), Base64.DEFAULT);
 
             Map<String, String> headers = new HashMap<>();
             headers.put("Content-Type", "application/json");
             headers.put("Authorization", "Basic " + authorization);
             headers.put("Content-Length", Integer.toString(body.length));
-            headers.put("Idempotent-Token", mUuidIdempotentKey);
             request.setHeaders(headers);
 
             AndroidClient androidClient = new AndroidClient();
@@ -94,6 +77,5 @@ public class PayMayaPayment {
         } catch (PayMayaPaymentException ppe) {
             throw new PayMayaPaymentException(ppe.getMessage());
         }
-
     }
 }
