@@ -33,6 +33,8 @@ public final class Buyer implements Parcelable {
     private String firstName;
     private String middleName;
     private String lastName;
+    private String birthday;
+    private String sex;
     private Contact contact;
     private Address shippingAddress;
     private Address billingAddress;
@@ -54,6 +56,8 @@ public final class Buyer implements Parcelable {
         firstName = in.readString();
         middleName = in.readString();
         lastName = in.readString();
+        birthday = in.readString();
+        sex = in.readString();
         contact = in.readParcelable(Contact.class.getClassLoader());
         shippingAddress = in.readParcelable(Address.class.getClassLoader());
         billingAddress = in.readParcelable(Address.class.getClassLoader());
@@ -136,6 +140,40 @@ public final class Buyer implements Parcelable {
 
     /**
      *
+     * @return buyer's birthday
+     */
+    public String getBirthday() {
+        return birthday;
+    }
+
+    /**
+     * set a new value for buyer's birthday
+     *
+     * @param birthday
+     */
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    /**
+     *
+     * @return buyer's gender
+     */
+    public String getSex() {
+        return sex;
+    }
+
+    /**
+     * set a new value for buyer's gender
+     *
+     * @param sex
+     */
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    /**
+     *
      * @return buyer's contact (Optional)
      */
     public Contact getContact() {
@@ -212,6 +250,8 @@ public final class Buyer implements Parcelable {
         dest.writeString(firstName);
         dest.writeString(middleName);
         dest.writeString(lastName);
+        dest.writeString(birthday);
+        dest.writeString(sex);
         dest.writeParcelable(contact, flags);
         dest.writeParcelable(shippingAddress, flags);
         dest.writeParcelable(billingAddress, flags);
@@ -224,6 +264,8 @@ public final class Buyer implements Parcelable {
         sb.append("firstName='").append(firstName).append('\'');
         sb.append(", middleName='").append(middleName).append('\'');
         sb.append(", lastName='").append(lastName).append('\'');
+        sb.append(", birthday='").append(birthday).append('\'');
+        sb.append(", sex='").append(sex).append('\'');
         sb.append(", contact=").append(contact);
         sb.append(", shippingAddress=").append(shippingAddress);
         sb.append(", billingAddress=").append(billingAddress);
